@@ -8,6 +8,8 @@ import UIKit
 
 class FeedViewController: UIViewController {
     
+    var stringURL = AppConfiguration.allCases.randomElement()?.rawValue
+    
     private let newPostTitle = "Latest News"
     //
     private var timer: Timer?
@@ -102,6 +104,9 @@ class FeedViewController: UIViewController {
         setupViews()
         setupConstraints()
         button.delegate = self
+        
+        print(stringURL, "stringURL")
+        NetworkService.request(for:  AppConfiguration.allCases.randomElement()!)
         
         // Added CallBack
         checkGuessButton.callBack = { [weak self] in
