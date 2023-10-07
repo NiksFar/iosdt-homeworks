@@ -19,8 +19,9 @@ class TabBarController: UITabBarController {
     }
     
     private func setupUI() {
-        
+             
         feedTabNavigationController = UINavigationController.init(rootViewController: FeedViewController())
+        
         let loginInspector = MyLoginFactory().makeLoginInspector()
         profileTabNavigationController = UINavigationController(rootViewController: LogInViewController(service: loginInspector))
        // postTabNavigationController = UINavigationController(rootViewController: PostViewController())
@@ -36,6 +37,6 @@ class TabBarController: UITabBarController {
         //postTabNavigationController.tabBarItem = item3
         
         UITabBar.appearance().backgroundColor = .systemOrange
-        
+
     }
 }

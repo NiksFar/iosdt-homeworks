@@ -33,6 +33,7 @@
 		11F3F97E2A2BFC2F00708636 /* StorageService.docc in Sources */ = {isa = PBXBuildFile; fileRef = 11F3F97D2A2BFC2F00708636 /* StorageService.docc */; };
 		11F3F98C2A2BFC2F00708636 /* StorageService.h in Headers */ = {isa = PBXBuildFile; fileRef = 11F3F97C2A2BFC2F00708636 /* StorageService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		11F3F9992A2BFE1B00708636 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F3F9982A2BFE1B00708636 /* Post.swift */; };
+		11FBD5402AD1C47A003B06CC /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FBD53F2AD1C47A003B06CC /* NetworkService.swift */; };
 		11FCE7042AB9D5FE00AF2BFF /* RunningTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FCE7032AB9D5FE00AF2BFF /* RunningTimer.swift */; };
 		11FF6F8F29FC2F52008F8A1F /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FF6F8E29FC2F52008F8A1F /* LogInViewController.swift */; };
 /* End PBXBuildFile section */
@@ -88,6 +89,7 @@
 		11F3F97C2A2BFC2F00708636 /* StorageService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StorageService.h; sourceTree = "<group>"; };
 		11F3F97D2A2BFC2F00708636 /* StorageService.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = StorageService.docc; sourceTree = "<group>"; };
 		11F3F9982A2BFE1B00708636 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Post.swift; path = StorageService/Post.swift; sourceTree = SOURCE_ROOT; };
+		11FBD53F2AD1C47A003B06CC /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		11FCE7032AB9D5FE00AF2BFF /* RunningTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningTimer.swift; sourceTree = "<group>"; };
 		11FF6F8E29FC2F52008F8A1F /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -139,6 +141,7 @@
 				1159B1402A9FC56700C215F0 /* FeedModel.swift */,
 				1159B13E2A9FB29900C215F0 /* CustomButton.swift */,
 				11FCE7032AB9D5FE00AF2BFF /* RunningTimer.swift */,
+				11FBD53F2AD1C47A003B06CC /* NetworkService.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -304,6 +307,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				11FBD5402AD1C47A003B06CC /* NetworkService.swift in Sources */,
 				118CAE2F2A1BDBC8007A3532 /* PhotosTableViewCell.swift in Sources */,
 				1159B13F2A9FB29900C215F0 /* CustomButton.swift in Sources */,
 				118CAE322A1BF37B007A3532 /* PhotosViewController.swift in Sources */,
