@@ -33,7 +33,9 @@
 		11F3F97E2A2BFC2F00708636 /* StorageService.docc in Sources */ = {isa = PBXBuildFile; fileRef = 11F3F97D2A2BFC2F00708636 /* StorageService.docc */; };
 		11F3F98C2A2BFC2F00708636 /* StorageService.h in Headers */ = {isa = PBXBuildFile; fileRef = 11F3F97C2A2BFC2F00708636 /* StorageService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		11F3F9992A2BFE1B00708636 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F3F9982A2BFE1B00708636 /* Post.swift */; };
+		11FBD5422AD1D609003B06CC /* InfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FBD5412AD1D609003B06CC /* InfoModel.swift */; };
 		11FCE7042AB9D5FE00AF2BFF /* RunningTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FCE7032AB9D5FE00AF2BFF /* RunningTimer.swift */; };
+		11FDCA682AD480500052FEF4 /* File.json in Resources */ = {isa = PBXBuildFile; fileRef = 11FDCA672AD4804F0052FEF4 /* File.json */; };
 		11FF6F8F29FC2F52008F8A1F /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FF6F8E29FC2F52008F8A1F /* LogInViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -88,7 +90,9 @@
 		11F3F97C2A2BFC2F00708636 /* StorageService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StorageService.h; sourceTree = "<group>"; };
 		11F3F97D2A2BFC2F00708636 /* StorageService.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = StorageService.docc; sourceTree = "<group>"; };
 		11F3F9982A2BFE1B00708636 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Post.swift; path = StorageService/Post.swift; sourceTree = SOURCE_ROOT; };
+		11FBD5412AD1D609003B06CC /* InfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoModel.swift; sourceTree = "<group>"; };
 		11FCE7032AB9D5FE00AF2BFF /* RunningTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningTimer.swift; sourceTree = "<group>"; };
+		11FDCA672AD4804F0052FEF4 /* File.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = File.json; sourceTree = "<group>"; };
 		11FF6F8E29FC2F52008F8A1F /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -137,7 +141,9 @@
 				11D6BEA2299ED78900775B4A /* PostViewController.swift */,
 				1144E00F29A3C99A00E661AB /* InfoViewController.swift */,
 				1159B1402A9FC56700C215F0 /* FeedModel.swift */,
+				11FBD5412AD1D609003B06CC /* InfoModel.swift */,
 				1159B13E2A9FB29900C215F0 /* CustomButton.swift */,
+				11FDCA672AD4804F0052FEF4 /* File.json */,
 				11FCE7032AB9D5FE00AF2BFF /* RunningTimer.swift */,
 			);
 			path = Navigation;
@@ -286,6 +292,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				111AA02329990AB20024317C /* LaunchScreen.storyboard in Resources */,
+				11FDCA682AD480500052FEF4 /* File.json in Resources */,
 				111AA02029990AB20024317C /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -305,6 +312,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				118CAE2F2A1BDBC8007A3532 /* PhotosTableViewCell.swift in Sources */,
+				11FBD5422AD1D609003B06CC /* InfoModel.swift in Sources */,
 				1159B13F2A9FB29900C215F0 /* CustomButton.swift in Sources */,
 				118CAE322A1BF37B007A3532 /* PhotosViewController.swift in Sources */,
 				1167DC4F2A1A977C001361B9 /* DataService.swift in Sources */,
