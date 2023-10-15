@@ -35,7 +35,6 @@
 		11F3F9992A2BFE1B00708636 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F3F9982A2BFE1B00708636 /* Post.swift */; };
 		11FBD5422AD1D609003B06CC /* InfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FBD5412AD1D609003B06CC /* InfoModel.swift */; };
 		11FCE7042AB9D5FE00AF2BFF /* RunningTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FCE7032AB9D5FE00AF2BFF /* RunningTimer.swift */; };
-		11FDCA682AD480500052FEF4 /* File.json in Resources */ = {isa = PBXBuildFile; fileRef = 11FDCA672AD4804F0052FEF4 /* File.json */; };
 		11FF6F8F29FC2F52008F8A1F /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FF6F8E29FC2F52008F8A1F /* LogInViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -92,7 +91,6 @@
 		11F3F9982A2BFE1B00708636 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Post.swift; path = StorageService/Post.swift; sourceTree = SOURCE_ROOT; };
 		11FBD5412AD1D609003B06CC /* InfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoModel.swift; sourceTree = "<group>"; };
 		11FCE7032AB9D5FE00AF2BFF /* RunningTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningTimer.swift; sourceTree = "<group>"; };
-		11FDCA672AD4804F0052FEF4 /* File.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = File.json; sourceTree = "<group>"; };
 		11FF6F8E29FC2F52008F8A1F /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -143,7 +141,6 @@
 				1159B1402A9FC56700C215F0 /* FeedModel.swift */,
 				11FBD5412AD1D609003B06CC /* InfoModel.swift */,
 				1159B13E2A9FB29900C215F0 /* CustomButton.swift */,
-				11FDCA672AD4804F0052FEF4 /* File.json */,
 				11FCE7032AB9D5FE00AF2BFF /* RunningTimer.swift */,
 			);
 			path = Navigation;
@@ -292,7 +289,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				111AA02329990AB20024317C /* LaunchScreen.storyboard in Resources */,
-				11FDCA682AD480500052FEF4 /* File.json in Resources */,
 				111AA02029990AB20024317C /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

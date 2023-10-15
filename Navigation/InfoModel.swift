@@ -65,9 +65,9 @@ struct NetworkService {
         }
     }
     
-    static func parse<T:Decodable>(jsonData: Data, model: T.Type) -> [T]? {
+    static func parse<T:Decodable>(jsonData: Data, model: T.Type) -> T? {
            do {
-               let decodedData = try JSONDecoder().decode([T].self, from: jsonData)
+               let decodedData = try JSONDecoder().decode(T.self, from: jsonData)
                print("Data Decoded!")
                return decodedData
            } catch {
@@ -92,23 +92,21 @@ struct NetworkService {
 }
 
 struct Planet: Codable {
-    let name, rotationPeriod, orbitalPeriod, diameter: String
-    let climate, gravity, terrain, surfaceWater: String
-    let population: String
-    let residents, films: [String]
-    let created, edited: String
-    let url: String
+    let name: String
+    let orbitalPeriod: String
+    let residents: [String]
 
     enum CodingKeys: String, CodingKey {
         case name
-        case rotationPeriod = "rotation_period"
         case orbitalPeriod = "orbital_period"
-        case diameter, climate, gravity, terrain
-        case surfaceWater = "surface_water"
-        case population, residents, films, created, edited, url
+        case residents
     }
-    
-    
+}
 
+struct Residents: Codable {
+    let residentName: String
     
+    enum CodingKeys: String, CodingKey {
+        case residentName = "name"
+    }
 }

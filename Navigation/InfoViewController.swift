@@ -10,9 +10,11 @@ import UIKit
 class InfoViewController: UIViewController, UIAlertViewDelegate {
     
     let stringURL = "https://jsonplaceholder.typicode.com/todos/"
-    let jsonUrl = "https://swapi.dev/api/planets/1"
-    var planetsArray: [Planet] = []
+    let jsonUrl = "https://swapi.dev/api/planets/1/?format=json"
+    
+    var planet: Planet?
     var objectArray: [InfoObject] = []
+    var residentNameArray: [String] = []
     
     lazy var infoLabel: UILabel = {
             let label = UILabel()
@@ -51,28 +53,50 @@ class InfoViewController: UIViewController, UIAlertViewDelegate {
             }
         }
 
-        NetworkService.loadData(urlString: stringURL) { result in
+        NetworkService.loadData(urlString: jsonUrl) { result in
             switch result {
-                
             case .success(let data):
-                self.objectArray = NetworkService.parse(jsonData: data, model: InfoObject.self) ?? []
-               // self.array = NetworkService.parse(jsonData: data, model: Planet.self) ?? []
-             //   print(self.objectArray)
+                guard let planet = NetworkService.parse(jsonData: data, model: Planet.self) else {return}
+                self.planet = planet
+                getNameArray(planet: planet)
+                DispatchQueue.main.async {
+                    self.info2Label.text = self.planet?.orbitalPeriod
+                    //self.planetsTableView.reloadData()
+                }
             case .failure(let error):
                 print(error.localizedDescription)
             }
         }
         
-        if let array = NetworkService.loadLocalJson(resource: "File", model: Planet.self) {
-            self.planetsArray = array
-            DispatchQueue.main.async {
-                self.info2Label.text = self.planetsArray[0].orbitalPeriod
-                self.planetsTableView.reloadData()
+        func getNameArray(planet: Planet) {
+            let peoples = planet.residents
+            for people in peoples {
+                let url = people + "?format=json"
+                NetworkService.loadData(urlString: url) { result in
+                    switch result {
+                    case .success(let data):
+                        guard let name = NetworkService.parse(jsonData: data, model: Residents.self) else {return}
+                        self.residentNameArray.append(name.residentName)
+                        DispatchQueue.main.async {
+                            self.planetsTableView.reloadData()
+                        }
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                    }
+                }
             }
-        } else {
-            print("NO DATA")
         }
         
+//        
+//        if let array = NetworkService.loadLocalJson(resource: "File", model: Planet.self) {
+//            self.planetsArray = array
+//            DispatchQueue.main.async {
+//                self.info2Label.text = self.planetsArray[0].orbitalPeriod
+//                self.planetsTableView.reloadData()
+//            }
+//        } else {
+//            print("NO DATA")
+//        }
     }
     
     private func setupView() {
@@ -83,7 +107,7 @@ class InfoViewController: UIViewController, UIAlertViewDelegate {
     }
     
     private func setTitle() {
-        title = "Info"
+        title = planet?.name
     }
     
     private func setBackgroundColor() {
@@ -150,16 +174,30 @@ class InfoViewController: UIViewController, UIAlertViewDelegate {
 
 extension InfoViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        planetsArray[0].residents.count
+        residentNameArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
         //tableView.dequeueReusableCell(withIdentifier: "idiha", for: indexPath)
-        let element = planetsArray[0].residents[indexPath.row]
+        
+        let element = residentNameArray[indexPath.row]
+//        NetworkService.loadData(urlString: element) { result in
+//            switch result {
+//            case .success(let data):
+//                self.planet = NetworkService.parse(jsonData: data, model: Planet.self)
+//                DispatchQueue.main.async {
+//                    self.planetsTableView.reloadData()
+//                }
+//            case .failure(let error):
+//                print(error.localizedDescription)
+//            }
+//        }
         cell.textLabel?.text = element
         return cell
     }
     
     
 }
+
+
