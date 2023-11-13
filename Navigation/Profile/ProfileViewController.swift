@@ -17,7 +17,8 @@ class ProfileViewController: UIViewController {
     
     let substrateView = UIView()
     
-    var user: User!
+    var user = User(login: "111", fullName: "Nikita", avatar: UIImage(named: "Image1")!, status: "Going for a walk")
+    
     
     let animatedView: UIImageView = {
         
