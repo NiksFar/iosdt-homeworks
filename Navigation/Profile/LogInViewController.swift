@@ -55,7 +55,7 @@ class LogInViewController: UIViewController {
         
         let textField = TextFieldWithPadding()
         textField.layer.borderColor = UIColor.lightGray.cgColor
-        textField.placeholder = "111"
+        textField.placeholder = "E-mail"
         textField.textColor = .black
         textField.font = .systemFont(ofSize: 16)
         textField.backgroundColor = UIColor.systemGray5
@@ -69,7 +69,7 @@ class LogInViewController: UIViewController {
         
         let textField = TextFieldWithPadding()
         textField.layer.borderColor = UIColor.lightGray.cgColor
-        textField.placeholder = "111"
+        textField.placeholder = "Password"
         textField.textColor = .black
         textField.font = .systemFont(ofSize: 16)
         textField.backgroundColor = UIColor.systemGray5
@@ -86,7 +86,7 @@ class LogInViewController: UIViewController {
         
         let alphaImage = UIImage(named: "pixelImage")
         
-        button.setTitle("Log in", for: .normal)
+        //button.setTitle("Log in", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 10
         
@@ -94,9 +94,42 @@ class LogInViewController: UIViewController {
         button.layer.masksToBounds = true
         button.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
+        guard let delegate = loginDelegate else {return button}
+        let title = delegate.checkRegistration() ? "Log Out" : "Log In"
+        button.setTitle(title, for: .normal)
         return button
     }()
     
+    lazy var registrateButton: UIButton = {
+        
+        let button = UIButton()
+        
+        let alphaImage = UIImage(named: "pixelImage")
+        
+        button.setTitle("Sign Up", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.layer.cornerRadius = 10
+        
+        button.setBackgroundImage(UIImage(named: "pixelImage"), for: .normal)
+        button.layer.masksToBounds = true
+        button.addTarget(self, action: #selector(register), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        guard let delegate = loginDelegate else {return button}
+        let hide = delegate.checkRegistration() ? true : false
+        button.isHidden = hide
+        return button
+    }()
+    @objc func register() {
+        //Checker.share.logOut()
+        //Создаем нового пользователя
+        Checker.createNewUser(mail: loginTF.text!, password: passwordTF.text!) { textError in
+            if let textError = textError {
+                let alert = UIAlertController(title: "Alert", message: "\(textError)", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "ok", style: .default))
+                self.present(alert, animated: true)
+            }
+        }
+    }
     // Обработка нажатия кнопки
     @objc func buttonPressed() {
         logInValidation()
@@ -104,26 +137,38 @@ class LogInViewController: UIViewController {
 
     
     func logInValidation() {
-        #if DEBUG
-        let userService = TestUserService()
-        #else
-        let userService = CurrentUserService()
-        #endif
-        let user = userService.getUser(login: loginTF.text ?? "")
-       // print(loginDelegate)
-        guard let validation = loginDelegate?.check(login: loginTF.text!, password: passwordTF.text!) else {print("nil"); return}
-        print(validation)
-        
-        
-        if let user = user, validation {
-            let vc = ProfileViewController()
-            vc.user = user
-            self.navigationController?.pushViewController(vc, animated: true)
+        guard let delegate = loginDelegate else {return}
+        if delegate.checkRegistration() {
+            Checker.share.logOut()
         } else {
-            let alertVC = UIAlertController(title: "Внимание", message: "Wrong data", preferredStyle: .alert)
-            alertVC.addAction(UIAlertAction(title: "Ok", style: .default))
-            self.present(alertVC, animated: true)
+            // Пользователь существует
+            loginDelegate?.check(login: loginTF.text!, password: passwordTF.text!, completionHandler: { result in
+                if result {
+                    let vc = ProfileViewController()
+                    self.navigationController?.pushViewController(vc, animated: true)
+                } else {
+                    print("Wrong data")
+                }
+            })
         }
+//        
+//        let userService = CurrentUserService()
+//        
+//        let user = userService.getUser(login: loginTF.text ?? "")
+//       // print(loginDelegate)
+//        guard let validation = loginDelegate?.check(login: loginTF.text!, password: passwordTF.text!) else {print("nil"); return}
+//        print(validation)
+//        
+//        
+//        if let user = user, validation {
+//            let vc = ProfileViewController()
+//            vc.user = user
+//            self.navigationController?.pushViewController(vc, animated: true)
+//        } else {
+//            let alertVC = UIAlertController(title: "Внимание", message: "Wrong data", preferredStyle: .alert)
+//            alertVC.addAction(UIAlertAction(title: "Ok", style: .default))
+//            self.present(alertVC, animated: true)
+//        }
     }
     
     let scrollView: UIScrollView = {
@@ -159,6 +204,7 @@ class LogInViewController: UIViewController {
         self.view.addSubview(logo)
         self.view.addSubview(stackView)
         self.view.addSubview(logInButton)
+        self.view.addSubview(registrateButton)
         stackView.addArrangedSubview(loginTF)
         stackView.addArrangedSubview(separateView)
         stackView.addArrangedSubview(passwordTF)
@@ -194,8 +240,12 @@ class LogInViewController: UIViewController {
             logInButton.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 16),
             logInButton.heightAnchor.constraint(equalToConstant: 50),
             logInButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            logInButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
+            logInButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
+            registrateButton.topAnchor.constraint(equalTo: logInButton.bottomAnchor, constant: 16),
+            registrateButton.heightAnchor.constraint(equalToConstant: 50),
+            registrateButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            registrateButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
         ])
     }
     

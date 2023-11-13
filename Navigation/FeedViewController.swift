@@ -29,7 +29,7 @@ class FeedViewController: UIViewController {
     lazy var button = CustomButton(title: " Go To To ", titleColor: .black, backgroundColor: .green)
     
     // Timer Button
-    lazy var timerButton = CustomButton(title: " Start / Stop ", titleColor: .systemYellow, backgroundColor: .blue)
+    lazy var timerButton = CustomButton(title: " Start ", titleColor: .systemYellow, backgroundColor: .blue)
 
     private func createTimer() {
             timer?.tolerance = 0.3
@@ -117,6 +117,8 @@ class FeedViewController: UIViewController {
         
         // Added CallBack for Timer
         createTimer()
+        timer?.invalidate()
+        timerLabel.text = "Press start"
         timerButton.callBack = {  [weak self] in
             guard let self else {return}
             checkValidation()
