@@ -11,12 +11,16 @@ class ViewController: UIViewController {
     
     lazy var addImage = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addImageAction))
     lazy var addFolder = UIBarButtonItem(image: UIImage(systemName: "folder.badge.plus"), style: .plain, target: self, action: #selector(addFolderAction))
+    lazy var backButton = UIBarButtonItem(title: nil, style: .plain, target: self, action: #selector(backButtonAction))
     
     var tableView = UITableView()
     let picker = UIImagePickerController()
     
-    let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+    var paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
     var contents: [String]?
+    
+    var currentPaths: [String] = []
+    var currentFolder: String = "Documents"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +29,7 @@ class ViewController: UIViewController {
         picker.delegate = self
         view.backgroundColor = .yellow
         navigationItem.rightBarButtonItems = [addImage, addFolder]
+        navigationItem.leftBarButtonItem = backButton
         setupView()
         contents = try? FileManager.default.contentsOfDirectory(atPath: paths[0])
     }
@@ -60,19 +65,28 @@ class ViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
+    func getCurrentPath() -> String {
+        var path = ""
+        guard !currentPaths.isEmpty else {return path}
+        for name in currentPaths {
+            path += "/\(name)"
+        }
+        print(path)
+        return path
+    }
+    
     @objc func addImageAction() {
         picker.sourceType = .photoLibrary
         picker.allowsEditing = false
         present(picker, animated: true)
-//        self.tableView.reloadData()
-//        FileService.shared.contentsOfDirectory()
+
     }
 
     @objc func addFolderAction() {
         alertTextField(message: nil) { result, text in
             if result, let text = text {
-                FileService.shared.createDirectory(name: text)
-                self.contents = try? FileManager.default.contentsOfDirectory(atPath: self.paths[0])
+                FileService.shared.createDirectory(name: self.getCurrentPath() + "/\(text)")
+                self.contents = try? FileManager.default.contentsOfDirectory(atPath: self.paths[0] + self.getCurrentPath())
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
@@ -80,6 +94,23 @@ class ViewController: UIViewController {
         }
     }
     
+    @objc func backButtonAction() {
+        currentPaths.removeLast()
+        self.contents = try? FileManager.default.contentsOfDirectory(atPath: self.paths[0] + self.getCurrentPath())
+        print(currentPaths)
+        if currentPaths.isEmpty {
+            currentFolder = "Documents"
+            backButton.title = nil
+        } else {
+            currentFolder = currentPaths.last!
+            if currentPaths.count > 1 {
+                backButton.title = "< " + currentPaths[currentPaths.count - 2]
+            } else {
+                backButton.title = "< Document"
+            }
+        }
+        tableView.reloadData()
+    }
                                         
 }
 
@@ -88,7 +119,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         contents?.count ?? 0
     }
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Documents"
+        return currentFolder
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -99,11 +130,12 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             guard let name = contents?[indexPath.row] else { return }
             
             let documentsDirectoryURL = try! FileManager().url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            let fileURL = documentsDirectoryURL.appendingPathComponent(name)
+            let fullName = getCurrentPath() + "/\(name)"
+            let fileURL = documentsDirectoryURL.appendingPathComponent(fullName)
             let deletedPath = fileURL.path
             FileService.shared.removeContent(path: deletedPath)
             //print(contents?[indexPath.row])
-            self.contents = try? FileManager.default.contentsOfDirectory(atPath: self.paths[0])
+            self.contents = try? FileManager.default.contentsOfDirectory(atPath: self.paths[0] + getCurrentPath())
             tableView.deleteRows(at: [indexPath], with: .fade)
             
         }
@@ -111,9 +143,32 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-        cell.textLabel?.text = contents?[indexPath.row]
+        guard let name = contents?[indexPath.row] else {return UITableViewCell()}
+        cell.textLabel?.text = name
+        let fullName = getCurrentPath() + "/\(name)"
+        print(fullName)
+        if let isFile = FileService.shared.checkFile(name: fullName) {
+            cell.accessoryType = isFile ? .none : .disclosureIndicator
+        }
+        
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let type = tableView.cellForRow(at: indexPath)?.accessoryType
+        if type == .disclosureIndicator {
+            print("Folder")
+            guard let name = contents?[indexPath.row] else {return}
+            currentPaths.append(name)
+            self.contents = try? FileManager.default.contentsOfDirectory(atPath: self.paths[0] + "/\(name)")
+            backButton.title = "﹤ \(currentFolder)"
+            currentFolder = name
+            tableView.reloadData()
+        } else {
+            print("File")
+        }
+    }
+    
 }
 
 extension ViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -126,10 +181,11 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             if let imgUrl = info[UIImagePickerController.InfoKey.imageURL] as? URL {
                 let imageName = imgUrl.lastPathComponent
-                FileService.shared.createFile(image: pickedImage, name: imageName) { result in
+                let fullName = getCurrentPath() + "/\(imageName)"
+                FileService.shared.createFile(image: pickedImage, name: fullName) { result in
                     if result {
                         print("reload")
-                        self.contents = try? FileManager.default.contentsOfDirectory(atPath: self.paths[0])
+                        self.contents = try? FileManager.default.contentsOfDirectory(atPath: self.paths[0] + self.getCurrentPath())
                         self.tableView.reloadData()
                     }
                 }

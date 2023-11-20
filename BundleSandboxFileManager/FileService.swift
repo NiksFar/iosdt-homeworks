@@ -23,14 +23,14 @@ class FileService: FileManagerService {
     func contentsOfDirectory() {
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let contents = try? fileManager.contentsOfDirectory(atPath: paths[0])
-        print("Содержимое директории: \(contents)")
+        //print("Содержимое директории: \(contents)")
     }
     
     func createDirectory(name: String) {
         
         do {
             let documentUrl = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            let url = documentUrl.appendingPathComponent("/\(name)")
+            let url = documentUrl.appendingPathComponent("\(name)")
             try fileManager.createDirectory(at: url, withIntermediateDirectories: true)
             
         } catch {
@@ -60,10 +60,35 @@ class FileService: FileManagerService {
             print(error.localizedDescription)
         }
     }
+    
+    func checkFile(name: String) -> Bool? {
+        
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+
+        let fullPath = paths + "/\(name)"
+        var isDir : ObjCBool = false
+        if fileManager.fileExists(atPath: fullPath, isDirectory:&isDir) {
+            if isDir.boolValue {
+                print("Is Directory", fullPath)
+                return false
+            } else {
+                print("Is file", fullPath)
+                return true
+            }
+        } else {
+            print("Else else")
+            return nil
+        }
+    }
+    
 }
 
 
 struct Content {
-    let url: URL
-    let file: Data
+    let type: ContentType
+}
+
+enum ContentType {
+    case file
+    case folder
 }
