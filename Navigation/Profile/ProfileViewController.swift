@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import StorageService
 
 class ProfileViewController: UIViewController {
     
@@ -17,7 +18,10 @@ class ProfileViewController: UIViewController {
     
     let substrateView = UIView()
     
-    var user: User!
+    var user = User(login: "111", fullName: "Nikita", avatar: UIImage(named: "Image1")!, status: "Going for a walk")
+    
+    var tappedRow: Int = 0
+    var tappedPost: Post!
     
     let animatedView: UIImageView = {
         
@@ -68,6 +72,11 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
+        //
+        let tap = UITapGestureRecognizer(target: self, action: #selector(doubleTapped))
+        tap.numberOfTapsRequired = 2
+        tableView.addGestureRecognizer(tap)
+        //
         tabBarController?.tabBar.isHidden = false
         self.view.backgroundColor = .gray
         self.view.addSubview(tableView)
@@ -76,6 +85,18 @@ class ProfileViewController: UIViewController {
         self.tableView.rowHeight = UITableView.automaticDimension
         
     }
+    
+    @objc func doubleTapped() {
+        print(#function, tappedRow)
+        let newObject = FavoritesModel()
+        newObject.author = tappedPost.author
+        newObject.image = tappedPost.image
+        newObject.postDescription = tappedPost.description
+        newObject.likes = Int16(tappedPost.likes)
+        newObject.views = Int16(tappedPost.views)
+        CoreDataService.shared.saveContext()
+    }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -231,6 +252,9 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         if indexPath.section == 0 {
             let vc = PhotosViewController()
             self.navigationController?.pushViewController(vc, animated: true)
+        } else {
+            tappedRow = indexPath.row
+            tappedPost = posts[indexPath.row]
         }
     }
     
