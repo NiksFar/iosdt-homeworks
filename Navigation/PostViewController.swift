@@ -17,6 +17,7 @@ final class PostViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.register(PostTableViewCell.self, forCellReuseIdentifier: "PostCell")
         tableView.delegate = self
         tableView.dataSource = self
         fetchResultController.delegate = self
@@ -79,13 +80,25 @@ extension PostViewController: UITableViewDelegate, UITableViewDataSource {
         return fetchResultController.sections?.count ?? 0
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .value1, reuseIdentifier: nil)
-        let post = fetchResultController.object(at: indexPath) as! FavoritesModel
-        cell.textLabel?.text = post.author
-        cell.detailTextLabel?.text = String(post.likes)
-        return cell
+        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell") as! PostTableViewCell
+            let post = fetchResultController.object(at: indexPath) as! FavoritesModel
+            cell.setData(model: post)
+            
+            return cell
+        }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return self.view.frame.width + 130
     }
+    
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        let cell = UITableViewCell(style: .value1, reuseIdentifier: nil)
+//        let post = fetchResultController.object(at: indexPath) as! FavoritesModel
+//        cell.textLabel?.text = post.author
+//        cell.detailTextLabel?.text = String(post.likes)
+//        return cell
+//    }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true

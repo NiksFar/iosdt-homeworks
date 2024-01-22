@@ -60,6 +60,14 @@ class PostTableViewCell: UITableViewCell {
         postImage.image = UIImage(named: post.image)
     }
     
+    func setData(model: FavoritesModel) {
+        authorLabel.text = model.author
+        descriptionLabel.text = model.postDescription
+        likeLabel.text = "Likes:\(model.likes)"
+        viewsLabel.text = "Views:\(model.views)"
+        postImage.image = UIImage(named: model.image ?? "cube")
+    }
+    
     func addSubview() {
         self.addSubview(authorLabel)
         self.addSubview(descriptionLabel)
